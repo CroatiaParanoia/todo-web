@@ -1,24 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+
+import useTodo from "./todo-hooks";
 
 function App() {
+  const [
+    { todoList, inputValue },
+    { createTodoItem, removeTodoItem, completeTodoItem, setInputValue },
+  ] = useTodo();
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+        <input
+          onChange={(e) => setInputValue(e.target.value)}
+          value={inputValue}
+        />{" "}
+        <button onClick={() => createTodoItem()}>创建</button>
+      </div>
+      <br />
+
+      <div>
+        {todoList.map((item) => {
+          return (
+            <div key={item.id} className="flex jc-sb ai-c">
+              <div
+                style={{
+                  textDecoration: item.isComplete ? "line-through" : "none",
+                }}
+              >
+                {item.content}
+              </div>
+              <div>
+                {item.isComplete ? (
+                  <button onClick={() => removeTodoItem(item.id)}>删除</button>
+                ) : (
+                  <button onClick={() => completeTodoItem(item.id)}>
+                    完成
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
